@@ -7,10 +7,13 @@
 
 .infoCard {
 	display:block;
-	padding:10px;
+	padding:8px 10px;
 	margin:10px 50px;
 	cursor:pointer;
 	background-color: #f0f0f0;
+	-moz-column-count:2; /* Firefox */
+	-webkit-column-count:2; /* Safari and Chrome */
+	column-count:2;
 }
 
 .infoCardHeader {
@@ -20,7 +23,7 @@
 
 .infoCardBody {
 	display:inline;
-	font: 1.0em/1.8em Georgia;
+	font: 0.9em/1.8em Georgia;
 }
 
 .goLink {

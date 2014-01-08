@@ -1,6 +1,6 @@
 {
   "name" : "Vannevar",
-  "version" : "0.1",
+  "version" : "0.2",
   "description" : "Shows first paragraph from all Wikipedia links within current article.",
   "background" : {
     "scripts": ["background.js"]
