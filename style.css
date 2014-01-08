@@ -1,0 +1,30 @@
+.mw-content-text {
+	
+}
+
+.wikiLink {
+}
+
+.infoCard {
+	display:block;
+	padding:10px;
+	margin:10px 50px;
+	cursor:pointer;
+	background-color: #f0f0f0;
+}
+
+.infoCardHeader {
+	display:none;
+	font-weight: bold;
+}
+
+.infoCardBody {
+	display:inline;
+	font: 1.0em/1.8em Georgia;
+}
+
+.goLink {
+	text-align: right;
+	font-weight:bold;
+	display:block;
+}
