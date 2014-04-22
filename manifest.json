@@ -1,7 +1,7 @@
 {
   "name" : "Vannevar",
   "version" : "0.3",
-  "description" : "Streamlines Wikipedia browsing by pulling linked content into the current article and limiting disruptions to the reading experience.",
+  "description" : "Vannevar streamlines Wikipedia reading—limiting disruptions to reading flow by pulling linked content into the current article.",
   "background" : {
     "scripts": ["background.js"]
   },
