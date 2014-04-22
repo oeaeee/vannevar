@@ -1,7 +1,7 @@
 {
   "name" : "Vannevar",
-  "version" : "0.2",
-  "description" : "Shows first paragraph from all Wikipedia links within current article.",
+  "version" : "0.3",
+  "description" : "Streamlines Wikipedia browsing by pulling linked content into the current article and limiting disruptions to the reading experience.",
   "background" : {
     "scripts": ["background.js"]
   },

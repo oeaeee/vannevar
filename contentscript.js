@@ -2,44 +2,29 @@
 var bodyContent = $("#bodyContent");
 var a = $("a[href^='/wiki']", bodyContent);
 
-/*
-// Hide extraneous wikipedia elements
-$("#mw-panel").hide();
-$("#mw-page-base").hide();
-$("#mw-head-base").hide();
-$("#mw-head").hide();
-// Restyle the article
-$("#content.mw-body").css({
-	"position":"absolute",
-	"margin-left":"0px",
-	"padding":"80px 20%",
-	"width":"60%",
-});
-*/
-
 function createCard(origLink,index) {
-
+	var footnoteTally = index + 1;
 	origLink.attr("class","wikiLink");
+	origLink.after("<sup class='mainText'> " + footnoteTally + "</sup> ");
 	var origText = origLink.text();
 	var origHref = origLink.attr("href");
 	var editedHref = origHref.substring(6);
 	editedHref = editedHref.replace("(","");
 	editedHref = editedHref.replace(")","");
 
-	// Put infoCard placeholder at the end of paragraphs containing a wikiLink, one placeholder for for each link
+	// Put infoCard placeholder at the end of paragraphs containing a wikiLink, one placeholder for each link
 	var containingParent = origLink.parent();
 
 	if ($("#infoCard" + editedHref).length == 0) {
-		var card = "<span class='infoCard' id='infoCard" + editedHref + "'><span class='infoCardHeader'  id='infoCardHeader" + editedHref + "'>" + origText + "</span><span class='infoCardBody' id='infoCardBody" + editedHref + "'></span><a class='goLink' href='" + origHref + "'>" + origText + "</a></span>";
-		containingParent.append(card);
+		var card = "<span class='infoCard' id='infoCard" + editedHref + "'><span class='infoCardBody' id='infoCardBody" + editedHref + "'><sup>" + footnoteTally + " </sup><a class='goLink' href='" + origHref + "'><b>" + origText + "</b></a>: </span></span>";
 
-		/*
-		// Give infoCard click functionality to toggle expand/collapse state
-		$("#infoCard" + index).click( function() { 
-			$("#infoCardHeader" + index).toggle();
-			$("#infoCardBody" + index).toggle();
-		});
-		*/
+		// Add infoCard to beginning of paragraph
+		// If there's already an infoCard, keep the order correct by adding it after existing cards
+		if (containingParent.find(".infoCard").length) {
+			containingParent.find(".infoCard").last().after(card);
+		} else {
+			containingParent.prepend(card);
+		}
 
 		// Go find the new article and bring back the first paragraph
 		getAndDisplay(origHref, editedHref);
@@ -52,8 +37,8 @@ function getAndDisplay(origHref, editedHref) {
 	xhr.onreadystatechange = function() {
 
 		if (xhr.readyState == 4) {
-	    
-		    // Grab everything from new article
+
+			// Grab everything from new article
 		    var entireArticle = xhr.responseText;
 		    var tempArticle = entireArticle;
 
@@ -80,7 +65,7 @@ function getAndDisplay(origHref, editedHref) {
 			var cardContent = tempArticle.substring(0,nLast);
 
 		    //  Update placeholder with the new article
-		    document.getElementById("infoCardBody" + editedHref).innerHTML = cardContent;
+		    $("#infoCardBody" + editedHref).append(cardContent);
     
   		};
 	};
@@ -89,7 +74,6 @@ function getAndDisplay(origHref, editedHref) {
 	// The regular expression produced a match, so notify the background page.
 	chrome.extension.sendRequest({}, function(response) {});
 };
-
 
 a.each(function (index) {
 	var origLink = $(this);
