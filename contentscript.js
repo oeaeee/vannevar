@@ -1,9 +1,9 @@
 // Search the article for #bodyContent and find all links pointing to other wikipedia articles
 var bodyContent = $("#bodyContent");
 var a = $("a[href^='/wiki']", bodyContent);
+var footnoteTally = 1;
 
 function createCard(origLink,index) {
-	var footnoteTally = index + 1;
 	origLink.attr("class","wikiLink");
 	origLink.after("<sup class='mainText'> " + footnoteTally + "</sup> ");
 	var origText = origLink.text();
@@ -18,15 +18,9 @@ function createCard(origLink,index) {
 	if ($("#infoCard" + editedHref).length == 0) {
 		var card = "<span class='infoCard' id='infoCard" + editedHref + "'><span class='infoCardBody' id='infoCardBody" + editedHref + "'><sup>" + footnoteTally + " </sup><a class='goLink' href='" + origHref + "'><b>" + origText + "</b></a>: </span></span>";
 
-		// Add infoCard to beginning of paragraph
-		// If there's already an infoCard, keep the order correct by adding it after existing cards
-		if (containingParent.find(".infoCard").length) {
-			containingParent.find(".infoCard").last().after(card);
-		} else {
-			containingParent.prepend(card);
-		}
+		containingParent.append(card);
+		footnoteTally++;
 
-		// Go find the new article and bring back the first paragraph
 		getAndDisplay(origHref, editedHref);
 	};
 };
@@ -42,7 +36,7 @@ function getAndDisplay(origHref, editedHref) {
 		    var entireArticle = xhr.responseText;
 		    var tempArticle = entireArticle;
 
-		    // If there's an anchor tag in the link, then trim everything before the anchor
+		    // If there's an anchor tag in the link, then find the anchored content
 			if (origHref.indexOf("#") != "-1") {
 
 				// Get the Id of the anchor tag
@@ -66,7 +60,8 @@ function getAndDisplay(origHref, editedHref) {
 
 		    //  Update placeholder with the new article
 		    $("#infoCardBody" + editedHref).append(cardContent);
-    
+
+
   		};
 	};
 	xhr.send();
@@ -78,14 +73,17 @@ function getAndDisplay(origHref, editedHref) {
 a.each(function (index) {
 	var origLink = $(this);
 
-	// Only show infoCards for wikipedia links that we think are in the main body of the article
-	// Main body is currently defined as being exactly two levels below--child of a child--an object with id "mw-content-text"
-	// Don't use any links that include a ":"
+	// Only generate infoCards for links that we think are in the main body of the article
+	//// Main body is currently defined as being exactly two levels below--child of a child--an object with id "mw-content-text"
+	//// Don't use links that include a ":"
+	//// Don't use links from "disambiguation" sections
 
 	if (origLink.attr("href").indexOf(":") == "-1") {
-		if (origLink.parent().parent().attr("id")) {
-			if (origLink.parent().parent().attr("id") == "mw-content-text") {
-				createCard(origLink,index);
+		if (origLink.parent().attr("class") != "dablink") {
+			if (origLink.parent().parent().attr("id")) {
+				if (origLink.parent().parent().attr("id") == "mw-content-text") {
+					createCard(origLink,index);
+				};
 			};
 		};
 	};
